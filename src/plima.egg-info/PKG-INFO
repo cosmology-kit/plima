@@ -1,0 +1,20 @@
+Metadata-Version: 2.4
+Name: plima
+Version: 0.1.dev0+d20260620
+Summary: Intrinsic alignment modeling tools for cosmology
+Author-email: Nikolina Šarčević <nikolina.sarcevic@gmail.com>
+License-Expression: MIT
+Classifier: Intended Audience :: Science/Research
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Engineering :: Astronomy
+Classifier: Topic :: Scientific/Engineering :: Physics
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: numpy>=1.23
+Requires-Dist: scipy
+Requires-Dist: py-lfkit
+Requires-Dist: pybinny
+Requires-Dist: pyccl
+Provides-Extra: plot
+Requires-Dist: matplotlib; extra == "plot"

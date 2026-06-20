@@ -1,0 +1,239 @@
+[build-system]
+requires = [
+  "setuptools >= 80",
+  "setuptools_scm[simple] >= 8",
+]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "plima"
+description = "Intrinsic alignment modeling tools for cosmology"
+readme = "README.md"
+requires-python = ">=3.10"
+dynamic = ["version"]
+
+license = "MIT"
+license-files = ["LICENSE*"]
+
+authors = [
+  { name = "Nikolina Šarčević", email = "nikolina.sarcevic@gmail.com" },
+]
+
+classifiers = [
+  "Intended Audience :: Science/Research",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Astronomy",
+  "Topic :: Scientific/Engineering :: Physics",
+]
+
+dependencies = [
+  "numpy>=1.23",
+  "scipy",
+  "py-lfkit",
+  "pybinny",
+  "pyccl",
+]
+
+[project.optional-dependencies]
+plot = [
+  "matplotlib",
+]
+
+[dependency-groups]
+dev = ["tox"]
+
+test = [
+  "pytest",
+  { include-group = "dev" },
+]
+
+docs = [
+  "sphinx < 9",
+  "sphinx-design",
+  "sphinx-multiversion",
+  "furo",
+  "sphinx-copybutton",
+  "matplotlib",
+  { include-group = "dev" },
+]
+
+lint = [
+  "ruff",
+  { include-group = "dev" },
+]
+
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+addopts = '-m "not benchmark"'
+markers = [
+  "slow: marks tests as slow",
+  "benchmark: marks benchmark tests",
+]
+
+
+[tool.ruff]
+line-length = 79
+
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "Q", "I", "D", "PLC0415"]
+ignore = ["E203", "E501"]
+
+
+[tool.ruff.lint.isort]
+known-first-party = ["plima"]
+
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+
+[tool.tox]
+requires = ["tox>=4.22"]
+labels = { test = ["py310", "py311", "py312", "py313"] }
+envlist = [
+  "do",
+  "docs",
+  "docs-releases",
+  "lint",
+  "py310",
+  "py311",
+  "py312",
+  "py313",
+]
+
+
+[tool.tox.env_run_base]
+description = "Run tests under {base_python}"
+change_dir = "{tox_root}/tests"
+dependency_groups = ["test"]
+allowlist_externals = ["pytest"]
+commands = [
+  ["pytest", "-m", "not slow", { replace = "posargs", extend = true }],
+]
+
+
+[tool.tox.env.bench]
+description = "Run slow benchmark tests"
+dependency_groups = ["test"]
+change_dir = "{tox_root}/tests"
+allowlist_externals = ["pytest"]
+commands = [
+  ["pytest", "-m", "slow", "benchmarks", { replace = "posargs", extend = true }],
+]
+
+
+[tool.tox.env_run_base.setenv]
+PIP_CACHE_DIR = "{tox_root}/.cache/pip"
+
+
+[tool.tox.env.docs]
+description = "Build docs with Sphinx"
+dependency_groups = ["docs"]
+commands = [
+  [
+    "sphinx-apidoc",
+    "-d", "2",
+    "-o", "{tox_root}/docs/api",
+    "--tocfile", "{tox_root}/docs/api/index",
+    "--no-toc",
+    "{tox_root}/src/plima",
+    "--separate",
+    "-f",
+  ],
+  [
+    "sphinx-build",
+    "-c", "{tox_root}/docs",
+    "-b", "{posargs:html}",
+    "{tox_root}/docs",
+    "{tox_root}/docs/_build/{posargs:html}",
+    "--fail-on-warning",
+  ],
+]
+
+
+[tool.tox.env.do]
+description = "Build docs, run doctests, build HTML, and open docs"
+dependency_groups = ["docs"]
+allowlist_externals = ["open"]
+change_dir = "{tox_root}"
+commands = [
+  [
+    "sphinx-apidoc",
+    "-d", "2",
+    "-o", "{tox_root}/docs/api",
+    "--tocfile", "{tox_root}/docs/api/index",
+    "--no-toc",
+    "{tox_root}/src/plima",
+    "--separate",
+    "-f",
+  ],
+  [
+    "sphinx-build",
+    "-c", "{tox_root}/docs",
+    "-b", "doctest",
+    "{tox_root}/docs",
+    "{tox_root}/docs/_build/doctest",
+    "--fail-on-warning",
+    { replace = "posargs", extend = true },
+  ],
+  [
+    "sphinx-build",
+    "-c", "{tox_root}/docs",
+    "-b", "html",
+    "{tox_root}/docs",
+    "{tox_root}/docs/_build/html",
+    "--fail-on-warning",
+    { replace = "posargs", extend = true },
+  ],
+  [
+    "open",
+    "{tox_root}/docs/_build/html/index.html",
+  ],
+]
+
+
+[tool.tox.env.docs-releases]
+description = "Build the documentation for PLIMA releases using Sphinx"
+dependency_groups = ["docs"]
+allowlist_externals = ["cp"]
+commands = [
+  [
+    "sphinx-apidoc",
+    "-d", "2",
+    "-o", "{tox_root}/docs/api",
+    "--tocfile", "{tox_root}/docs/api/index",
+    "--no-toc",
+    "{tox_root}/src/plima",
+    "--separate",
+    "-f",
+  ],
+  [
+    "sphinx-multiversion",
+    "-c", "{tox_root}/docs",
+    "{tox_root}/docs",
+    "{tox_root}/docs/_build/html",
+    "--fail-on-warning",
+  ],
+  [
+    "cp",
+    "{tox_root}/docs/_templates/pages_redirect.html",
+    "{tox_root}/docs/_build/html/index.html",
+  ],
+]
+
+
+[tool.tox.env.lint]
+description = "Lint PLIMA using Ruff"
+dependency_groups = ["lint"]
+commands = [
+  [
+    "ruff",
+    "check",
+    "{tox_root}",
+    { replace = "posargs", extend = true },
+  ],
+]
