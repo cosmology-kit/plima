@@ -1,0 +1,14 @@
+cff-version: 0.1.0
+message: "If you use PLIMA, please cite it as below."
+title: "PLIMA: Python Library for Intrinsic alignment Models and Amplitudes"
+type: software
+version: "0.1.0"
+
+authors:
+  - given-names: "Nikolina"
+    family-names: "Šarčević"
+    email: "nikolina.sarcevic@gmail.com"
+    orcid: "0000-0001-7301-6415"
+
+license: "MIT"
+repository-code: "https://github.com/cosmology-kit/plima"

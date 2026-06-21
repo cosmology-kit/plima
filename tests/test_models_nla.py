@@ -5,7 +5,11 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from plima.models.model_registry import get_model, list_model_aliases, list_models
+from plima.models.model_registry import (
+    get_model,
+    list_model_aliases,
+    list_models,
+)
 from plima.models.nla import (
     lf_nla_amplitude,
     nla_amplitude,
@@ -327,6 +331,7 @@ class FakeFractions:
     """Small fake LFKit fractions API."""
 
     def __init__(self) -> None:
+        """Tests that fake fraction calls are recorded."""
         self.calls: list[tuple[float, object, float, float, int]] = []
 
     def red_fraction(
@@ -347,6 +352,7 @@ class FakeRedLuminosityFunction:
     """Small fake LFKit red luminosity function."""
 
     def __init__(self) -> None:
+        """Tests that fake LFKit fractions are available."""
         self.fractions = FakeFractions()
 
 

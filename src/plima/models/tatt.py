@@ -13,8 +13,8 @@ from __future__ import annotations
 import numpy as np
 from numpy.typing import ArrayLike
 
+from plima.models.model_registry import register_ia_model
 from plima.utils.constants import C1_RHO_CRITICAL, DEFAULT_PIVOT_REDSHIFT
-from plima.utils.converters import redshift_to_scale_factor
 from plima.utils.types import FloatArray
 from plima.utils.validators import (
     as_finite_float_array,
@@ -31,6 +31,13 @@ __all__ = [
 ]
 
 
+@register_ia_model(
+    "tatt",
+    aliases=(
+        "tatt_amplitudes",
+        "tatt_a",
+    ),
+)
 def tatt_amplitudes(
     z: ArrayLike,
     *,
@@ -145,6 +152,9 @@ def tatt_normalized_coefficients(
         growth_factor,
         name="growth_factor",
     )
+    if growth_factor.shape != z.shape:
+        msg = "growth_factor must have the same shape as z."
+        raise ValueError(msg)
 
     validate_greater_than(z, threshold=-1.0, name="z")
     validate_positive(growth_factor, name="growth_factor")

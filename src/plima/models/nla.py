@@ -19,6 +19,7 @@ from typing import Any
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
 
+from plima.models.model_registry import register_ia_model
 from plima.utils.constants import (
     C1_RHO_CRITICAL,
     DEFAULT_HIGH_Z_PIVOT_REDSHIFT,
@@ -33,7 +34,6 @@ from plima.utils.validators import (
     validate_greater_than,
     validate_positive,
 )
-from plima.models.model_registry import register_ia_model
 
 __all__ = [
     "nla_amplitude",

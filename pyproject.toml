@@ -36,17 +36,11 @@ dependencies = [
   "pyccl",
 ]
 
+
 [project.optional-dependencies]
 plot = [
   "matplotlib",
-]
-
-[dependency-groups]
-dev = ["tox"]
-
-test = [
-  "pytest",
-  { include-group = "dev" },
+  "cmasher",
 ]
 
 docs = [
@@ -56,12 +50,14 @@ docs = [
   "furo",
   "sphinx-copybutton",
   "matplotlib",
-  { include-group = "dev" },
+  "cmasher",
+  "tox",
 ]
 
-lint = [
+dev = [
+  "pytest",
   "ruff",
-  { include-group = "dev" },
+  "tox>=4.22",
 ]
 
 
@@ -106,11 +102,14 @@ envlist = [
 ]
 
 
+[tool.tox.env_run_base.setenv]
+PIP_CACHE_DIR = "{tox_root}/.cache/pip"
+
+
 [tool.tox.env_run_base]
 description = "Run tests under {base_python}"
 change_dir = "{tox_root}/tests"
-dependency_groups = ["test"]
-allowlist_externals = ["pytest"]
+extras = ["dev"]
 commands = [
   ["pytest", "-m", "not slow", { replace = "posargs", extend = true }],
 ]
@@ -118,34 +117,27 @@ commands = [
 
 [tool.tox.env.bench]
 description = "Run slow benchmark tests"
-dependency_groups = ["test"]
+extras = ["dev"]
 change_dir = "{tox_root}/tests"
-allowlist_externals = ["pytest"]
 commands = [
   ["pytest", "-m", "slow", "benchmarks", { replace = "posargs", extend = true }],
 ]
 
 
-[tool.tox.env_run_base.setenv]
-PIP_CACHE_DIR = "{tox_root}/.cache/pip"
-
-
 [tool.tox.env.docs]
 description = "Build docs with Sphinx"
-dependency_groups = ["docs"]
+extras = ["docs"]
+allowlist_externals = ["rm"]
 commands = [
   [
-    "sphinx-apidoc",
-    "-d", "2",
-    "-o", "{tox_root}/docs/api",
-    "--tocfile", "{tox_root}/docs/api/index",
-    "--no-toc",
-    "{tox_root}/src/plima",
-    "--separate",
-    "-f",
+    "rm",
+    "-rf",
+    "{tox_root}/docs/_build",
+    "{tox_root}/docs/api/generated",
   ],
   [
     "sphinx-build",
+    "-E",
     "-c", "{tox_root}/docs",
     "-b", "{posargs:html}",
     "{tox_root}/docs",
@@ -157,22 +149,19 @@ commands = [
 
 [tool.tox.env.do]
 description = "Build docs, run doctests, build HTML, and open docs"
-dependency_groups = ["docs"]
-allowlist_externals = ["open"]
+extras = ["docs"]
+allowlist_externals = ["open", "rm"]
 change_dir = "{tox_root}"
 commands = [
   [
-    "sphinx-apidoc",
-    "-d", "2",
-    "-o", "{tox_root}/docs/api",
-    "--tocfile", "{tox_root}/docs/api/index",
-    "--no-toc",
-    "{tox_root}/src/plima",
-    "--separate",
-    "-f",
+    "rm",
+    "-rf",
+    "{tox_root}/docs/_build",
+    "{tox_root}/docs/api/generated",
   ],
   [
     "sphinx-build",
+    "-E",
     "-c", "{tox_root}/docs",
     "-b", "doctest",
     "{tox_root}/docs",
@@ -182,6 +171,7 @@ commands = [
   ],
   [
     "sphinx-build",
+    "-E",
     "-c", "{tox_root}/docs",
     "-b", "html",
     "{tox_root}/docs",
@@ -198,18 +188,14 @@ commands = [
 
 [tool.tox.env.docs-releases]
 description = "Build the documentation for PLIMA releases using Sphinx"
-dependency_groups = ["docs"]
-allowlist_externals = ["cp"]
+extras = ["docs"]
+allowlist_externals = ["cp", "rm"]
 commands = [
   [
-    "sphinx-apidoc",
-    "-d", "2",
-    "-o", "{tox_root}/docs/api",
-    "--tocfile", "{tox_root}/docs/api/index",
-    "--no-toc",
-    "{tox_root}/src/plima",
-    "--separate",
-    "-f",
+    "rm",
+    "-rf",
+    "{tox_root}/docs/_build",
+    "{tox_root}/docs/api/generated",
   ],
   [
     "sphinx-multiversion",
@@ -228,7 +214,7 @@ commands = [
 
 [tool.tox.env.lint]
 description = "Lint PLIMA using Ruff"
-dependency_groups = ["lint"]
+extras = ["dev"]
 commands = [
   [
     "ruff",

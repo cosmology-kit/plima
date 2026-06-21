@@ -1,0 +1,118 @@
+Metadata-Version: 2.4
+Name: pybinny
+Version: 0.4.8
+Summary: Flexible tomographic binning algorithms for cosmology.
+Author-email: Nikolina Sarcevic <nikolina.sarcevic@gmail.com>
+License: MIT
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: pyyaml
+Requires-Dist: scipy
+Requires-Dist: cmasher
+Provides-Extra: lf
+Requires-Dist: py-lfkit>=0.1.4; extra == "lf"
+Provides-Extra: cosmo
+Requires-Dist: pyccl>=3; extra == "cosmo"
+Provides-Extra: lf-cosmo
+Requires-Dist: py-lfkit>=0.1.4; extra == "lf-cosmo"
+Requires-Dist: pyccl>=3; extra == "lf-cosmo"
+Provides-Extra: dev
+Requires-Dist: bump-my-version>=0.26; extra == "dev"
+Requires-Dist: pytest>=8; extra == "dev"
+Requires-Dist: pytest-cov>=5; extra == "dev"
+Requires-Dist: ruff>=0.6; extra == "dev"
+Requires-Dist: tox>=4.22; extra == "dev"
+Requires-Dist: py-lfkit>=0.1.4; extra == "dev"
+Requires-Dist: pyccl>=3; extra == "dev"
+Provides-Extra: docs
+Requires-Dist: sphinx[doctest]<9; extra == "docs"
+Requires-Dist: sphinx-copybutton; extra == "docs"
+Requires-Dist: sphinx-design; extra == "docs"
+Requires-Dist: sphinx-multiversion; extra == "docs"
+Requires-Dist: sphinxawesome-theme; extra == "docs"
+Requires-Dist: furo; extra == "docs"
+Requires-Dist: py-lfkit>=0.1.4; extra == "docs"
+Requires-Dist: pyccl>=3; extra == "docs"
+Dynamic: license-file
+
+<p align="center">
+  <img src="docs/_static/animations/binny_logo.gif" width="220">
+</p>
+
+# binny
+
+<p align="center">
+
+[![CI](https://img.shields.io/github/actions/workflow/status/binny-org/binny/ci.yml?branch=main&label=CI&color=440154&style=flat-square)](https://github.com/binny-org/binny/actions/workflows/ci.yml)
+[![Docs](https://img.shields.io/github/actions/workflow/status/binny-org/binny/docs.yml?branch=main&label=docs&color=31688e&style=flat-square)](https://github.com/binny-org/binny/actions/workflows/docs.yml)
+[![License](https://img.shields.io/github/license/binny-org/binny?color=35b779&style=flat-square)](LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/pybinny?label=PyPI&color=fde725&style=flat-square&cacheSeconds=300)](https://pypi.org/project/pybinny/)
+[![Documentation](https://img.shields.io/badge/docs-binny-31688e?style=flat-square)](https://binny-org.github.io/binny)
+
+</p>
+
+**binny** is a Python library for constructing and analyzing  
+**tomographic redshift bins** used in cosmology and large-scale structure analyses.
+
+It provides flexible binning algorithms, validation utilities, and diagnostic tools
+for forecasting, inference pipelines, and survey analysis workflows.
+
+---
+
+# Installation
+
+## Install from PyPI
+
+```bash
+pip install pybinny
+```
+
+### Install from source
+```bash
+git clone https://github.com/binny-org/binny.git
+cd binny
+python -m pip install -e .
+```
+
+### Development install
+
+```bash
+python -m pip install -e ".[dev]"
+```
+
+---
+
+
+# Citation
+
+If you use **binny** in your research, please cite it.
+
+```bibtex
+@software{sarcevic2026binny,
+  title   = {binny: Flexible binning algorithms for cosmology},
+  author  = {Šarčević, Nikolina and van der Wild, Matthijs and Polen, Rebekah},
+  year    = {2026},
+  url     = {https://github.com/binny-org/binny}
+}
+```
+
+Citation metadata is also available in `CITATION.cff`, which GitHub uses to generate citation formats automatically.
+
+---
+
+# Contributing
+
+Contributions are very welcome.
+See the **Contributing** guide in the documentation for development workflow,
+testing, and code style guidelines.
+
+---
+
+# License
+
+
+and:
+
+MIT License © 2026 Nikolina Šarčević, Matthijs van der Wild, Rebekah Polen, and contributors.

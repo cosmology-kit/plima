@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "23 1 * * 0"
+  workflow_dispatch:
+
+jobs:
+  testing:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up uv with Python ${{ matrix.python-version }}
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "0.8.22"
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: uv sync --group test
+
+      - name: Run tests
+        run: uv run tox -m test
+
+  linting:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up uv with Python ${{ matrix.python-version }}
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "0.8.22"
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: uv sync --group lint
+
+      - name: Run ruff
+        run: uv run tox -e lint -- --output-format github
+
+  finalise:
+    runs-on: ubuntu-latest
+    needs: [testing, linting]
+
+    steps:
+      - name: Finalise
+        run: echo "All done"

@@ -8,7 +8,12 @@ from typing import Any
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
 
-from plima.utils.types import FloatArray, InputArray, ModelFunction, ParameterDict
+from plima.utils.types import (
+    FloatArray,
+    InputArray,
+    ModelFunction,
+    ParameterDict,
+)
 
 
 def test_float_array_alias() -> None:
