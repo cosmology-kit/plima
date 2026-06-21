@@ -1,17 +1,13 @@
 [build-system]
-requires = [
-  "setuptools >= 80",
-  "setuptools_scm[simple] >= 8",
-]
+requires = ["setuptools>=80", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
-
 
 [project]
 name = "plima"
-description = "Intrinsic alignment modeling tools for cosmology"
+dynamic = ["version"]
+description = "Intrinsic alignment modeling tools for cosmology."
 readme = "README.md"
 requires-python = ">=3.10"
-dynamic = ["version"]
 
 license = "MIT"
 license-files = ["LICENSE*"]
@@ -36,15 +32,15 @@ dependencies = [
   "pyccl",
 ]
 
-
 [project.optional-dependencies]
+
 plot = [
   "matplotlib",
   "cmasher",
 ]
 
 docs = [
-  "sphinx < 9",
+  "sphinx<9",
   "sphinx-design",
   "sphinx-copybutton",
   "furo",
@@ -55,11 +51,20 @@ docs = [
 ]
 
 dev = [
-  "pytest",
-  "ruff",
+  "pytest>=7",
+  "pytest-cov>=4",
+  "ruff>=0.5",
   "tox>=4.22",
 ]
 
+[tool.setuptools_scm]
+version_file = "src/plima/_version.py"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
@@ -70,26 +75,22 @@ markers = [
   "benchmark: marks benchmark tests",
 ]
 
-
 [tool.ruff]
 line-length = 79
 target-version = "py310"
 src = ["src", "tests"]
 include = ["src/**/*.py", "tests/**/*.py"]
-
+exclude = ["src/plima/_version.py"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "Q", "I", "D", "PLC0415"]
 ignore = ["E203", "E501"]
 
-
 [tool.ruff.lint.isort]
 known-first-party = ["plima"]
 
-
 [tool.ruff.lint.pydocstyle]
 convention = "google"
-
 
 [tool.tox]
 requires = ["tox>=4.22"]
@@ -105,10 +106,8 @@ envlist = [
   "py313",
 ]
 
-
 [tool.tox.env_run_base.setenv]
 PIP_CACHE_DIR = "{tox_root}/.cache/pip"
-
 
 [tool.tox.env.py310]
 description = "Run unit tests under Python 3.10"
@@ -117,14 +116,12 @@ commands = [
   ["pytest", "-q"],
 ]
 
-
 [tool.tox.env.py311]
 description = "Run unit tests under Python 3.11"
 extras = ["dev"]
 commands = [
   ["pytest", "-q"],
 ]
-
 
 [tool.tox.env.py312]
 description = "Run unit tests under Python 3.12"
@@ -133,7 +130,6 @@ commands = [
   ["pytest", "-q"],
 ]
 
-
 [tool.tox.env.py313]
 description = "Run unit tests under Python 3.13"
 extras = ["dev"]
@@ -141,14 +137,12 @@ commands = [
   ["pytest", "-q"],
 ]
 
-
 [tool.tox.env.bench]
 description = "Run slow benchmark tests"
 extras = ["dev"]
 commands = [
   ["pytest", "-m", "slow", "benchmarks", { replace = "posargs", extend = true }],
 ]
-
 
 [tool.tox.env.docs]
 description = "Build docs with Sphinx"
@@ -171,7 +165,6 @@ commands = [
     "--fail-on-warning",
   ],
 ]
-
 
 [tool.tox.env.do]
 description = "Run doctests, build HTML, and open local docs"
@@ -208,7 +201,6 @@ commands = [
   ],
 ]
 
-
 [tool.tox.env.docs-releases]
 description = "Build the documentation for PLIMA releases using Sphinx"
 extras = ["docs", "plot"]
@@ -234,7 +226,6 @@ commands = [
   ],
 ]
 
-
 [tool.tox.env.lint]
 description = "Lint PLIMA using Ruff"
 extras = ["dev"]
@@ -245,4 +236,12 @@ commands = [
     "{tox_root}",
     { replace = "posargs", extend = true },
   ],
+]
+
+[tool.tox.env.sync-release-metadata]
+description = "Sync CITATION.cff and README.md release metadata"
+skip_install = true
+deps = ["setuptools-scm>=8"]
+commands = [
+  ["python", "tools/sync_release_metadata.py"],
 ]

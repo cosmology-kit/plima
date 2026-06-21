@@ -12,9 +12,9 @@ tox>=4.22
 [docs]
 sphinx<9
 sphinx-design
-sphinx-multiversion
-furo
 sphinx-copybutton
+furo
+sphinx-multiversion
 matplotlib
 cmasher
 tox

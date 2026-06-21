@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: plima
-Version: 0.1.dev1+gbbb63dc4c.d20260621
+Version: 0.1.dev4+ge0ef091c0.d20260621
 Summary: Intrinsic alignment modeling tools for cosmology
 Author-email: Nikolina Šarčević <nikolina.sarcevic@gmail.com>
 License-Expression: MIT
@@ -23,9 +23,9 @@ Requires-Dist: cmasher; extra == "plot"
 Provides-Extra: docs
 Requires-Dist: sphinx<9; extra == "docs"
 Requires-Dist: sphinx-design; extra == "docs"
-Requires-Dist: sphinx-multiversion; extra == "docs"
-Requires-Dist: furo; extra == "docs"
 Requires-Dist: sphinx-copybutton; extra == "docs"
+Requires-Dist: furo; extra == "docs"
+Requires-Dist: sphinx-multiversion; extra == "docs"
 Requires-Dist: matplotlib; extra == "docs"
 Requires-Dist: cmasher; extra == "docs"
 Requires-Dist: tox; extra == "docs"
