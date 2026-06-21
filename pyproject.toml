@@ -106,9 +106,6 @@ envlist = [
   "py313",
 ]
 
-[tool.tox.env_run_base.setenv]
-PIP_CACHE_DIR = "{tox_root}/.cache/pip"
-
 [tool.tox.env.py310]
 description = "Run unit tests under Python 3.10"
 extras = ["dev"]
