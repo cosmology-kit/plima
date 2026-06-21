@@ -1,16 +1,21 @@
 name: Deploy Sphinx Documentation
 
 on:
-  push:
+  workflow_run:
+    workflows:
+      - CI
     branches:
       - main
-    tags:
-      - "v*.*.*"
+    types:
+      - completed
+
   workflow_dispatch:
 
 jobs:
   publish_sphinx_docs:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
 
