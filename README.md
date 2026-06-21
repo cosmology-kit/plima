@@ -3,6 +3,7 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/cosmology-kit/plima/ci.yml?branch=main&label=CI&color=3b9ab2&style=flat-square)](https://github.com/cosmology-kit/plima/actions/workflows/ci.yml)
 [![Docs](https://img.shields.io/badge/docs-main-3b9ab2?style=flat-square)](https://cosmology-kit.github.io/plima/main/)
 [![License](https://img.shields.io/badge/license-MIT-3b9ab2?style=flat-square)](LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/plima?color=3b9ab2&style=flat-square)](https://pypi.org/project/plima/)
 
 **PLIMA** is the **Python Library for Intrinsic alignment Models and Amplitudes**.
 
