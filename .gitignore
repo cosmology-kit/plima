@@ -25,6 +25,9 @@ dist/
 *.egg
 pip-wheel-metadata/
 
+# Generated version file
+src/plima/_version.py
+
 # Sphinx docs builds
 docs/_build/
 docs/api/generated/
@@ -43,3 +46,6 @@ Thumbs.db
 # Local env files
 .env
 .env.*
+
+# uv
+uv.lock

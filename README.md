@@ -1,11 +1,14 @@
 # plima
 
-[![CI](https://img.shields.io/github/actions/workflow/status/cosmology-kit/plima/ci.yml?branch=main\&label=CI\&color=3b9ab2\&style=flat-square)](https://github.com/cosmology-kit/plima/actions/workflows/ci.yml)
-[![License](https://img.shields.io/github/license/cosmology-kit/plima?color=3b9ab2\&style=flat-square)](LICENSE)
+[![CI](https://img.shields.io/github/actions/workflow/status/cosmology-kit/plima/ci.yml?branch=main&label=CI&color=3b9ab2&style=flat-square)](https://github.com/cosmology-kit/plima/actions/workflows/ci.yml)
+[![Docs](https://img.shields.io/badge/docs-main-3b9ab2?style=flat-square)](https://cosmology-kit.github.io/plima/main/)
+[![License](https://img.shields.io/badge/license-MIT-3b9ab2?style=flat-square)](LICENSE)
 
-**PLIMA** is the **Python Library for Intrinsic Alignment Models and Amplitudes**.
+**PLIMA** is the **Python Library for Intrinsic alignment Models and Amplitudes**.
 
-PLIMA provides lightweight tools for working with intrinsic alignment models in cosmology. It includes model level amplitude functions and CCL backend helpers for building intrinsic alignment inputs used in weak lensing calculations.
+PLIMA provides simple tools for working with intrinsic alignment models in cosmology.
+It includes model level amplitude functions and [CCL](https://ccl.readthedocs.io/en/latest/index.html) 
+backend helpers for building intrinsic alignment inputs used in weak lensing analyses.
 
 ## Models
 
@@ -23,18 +26,27 @@ For development, clone the repository and install it in editable mode:
 ```bash
 git clone https://github.com/cosmology-kit/plima.git
 cd plima
-pip install -e ".[test]"
+pip install -e ".[dev]"
 ```
 
-## Running tests
 
-```bash
-pytest -q
-```
+The development documentation is available at:
+
+https://cosmology-kit.github.io/plima/main/
 
 ## Citation
 
-If you use PLIMA in your research, please cite the software using the metadata in `CITATION.cff`.
+If you use PLIMA in your research, please cite it.
+
+```bibtex
+@software{sarcevic2026plima,
+  title   = {PLIMA: Python Library for Intrinsic alignment Models and Amplitudes},
+  author  = {Šarčević, Nikolina},
+  year    = {2026},
+  version = {0.1.0},
+  url     = {https://github.com/cosmology-kit/plima}
+}
+```
 
 ## License
 
