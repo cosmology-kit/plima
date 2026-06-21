@@ -46,9 +46,9 @@ plot = [
 docs = [
   "sphinx < 9",
   "sphinx-design",
-  "sphinx-multiversion",
-  "furo",
   "sphinx-copybutton",
+  "furo",
+  "sphinx-multiversion",
   "matplotlib",
   "cmasher",
   "tox",
@@ -63,7 +63,8 @@ dev = [
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
-addopts = '-m "not benchmark"'
+testpaths = ["tests"]
+addopts = "-ra -m 'not slow and not benchmark'"
 markers = [
   "slow: marks tests as slow",
   "benchmark: marks benchmark tests",
@@ -72,6 +73,9 @@ markers = [
 
 [tool.ruff]
 line-length = 79
+target-version = "py310"
+src = ["src", "tests"]
+include = ["src/**/*.py", "tests/**/*.py"]
 
 
 [tool.ruff.lint]
@@ -106,19 +110,41 @@ envlist = [
 PIP_CACHE_DIR = "{tox_root}/.cache/pip"
 
 
-[tool.tox.env_run_base]
-description = "Run tests under {base_python}"
-change_dir = "{tox_root}/tests"
+[tool.tox.env.py310]
+description = "Run unit tests under Python 3.10"
 extras = ["dev"]
 commands = [
-  ["pytest", "-m", "not slow", { replace = "posargs", extend = true }],
+  ["pytest", "-q"],
+]
+
+
+[tool.tox.env.py311]
+description = "Run unit tests under Python 3.11"
+extras = ["dev"]
+commands = [
+  ["pytest", "-q"],
+]
+
+
+[tool.tox.env.py312]
+description = "Run unit tests under Python 3.12"
+extras = ["dev"]
+commands = [
+  ["pytest", "-q"],
+]
+
+
+[tool.tox.env.py313]
+description = "Run unit tests under Python 3.13"
+extras = ["dev"]
+commands = [
+  ["pytest", "-q"],
 ]
 
 
 [tool.tox.env.bench]
 description = "Run slow benchmark tests"
 extras = ["dev"]
-change_dir = "{tox_root}/tests"
 commands = [
   ["pytest", "-m", "slow", "benchmarks", { replace = "posargs", extend = true }],
 ]
@@ -126,7 +152,7 @@ commands = [
 
 [tool.tox.env.docs]
 description = "Build docs with Sphinx"
-extras = ["docs"]
+extras = ["docs", "plot"]
 allowlist_externals = ["rm"]
 commands = [
   [
@@ -148,10 +174,9 @@ commands = [
 
 
 [tool.tox.env.do]
-description = "Build docs, run doctests, build HTML, and open docs"
-extras = ["docs"]
+description = "Run doctests, build HTML, and open local docs"
+extras = ["docs", "plot"]
 allowlist_externals = ["open", "rm"]
-change_dir = "{tox_root}"
 commands = [
   [
     "rm",
@@ -167,7 +192,6 @@ commands = [
     "{tox_root}/docs",
     "{tox_root}/docs/_build/doctest",
     "--fail-on-warning",
-    { replace = "posargs", extend = true },
   ],
   [
     "sphinx-build",
@@ -177,7 +201,6 @@ commands = [
     "{tox_root}/docs",
     "{tox_root}/docs/_build/html",
     "--fail-on-warning",
-    { replace = "posargs", extend = true },
   ],
   [
     "open",
@@ -188,7 +211,7 @@ commands = [
 
 [tool.tox.env.docs-releases]
 description = "Build the documentation for PLIMA releases using Sphinx"
-extras = ["docs"]
+extras = ["docs", "plot"]
 allowlist_externals = ["cp", "rm"]
 commands = [
   [
