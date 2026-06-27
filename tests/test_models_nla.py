@@ -130,8 +130,18 @@ def test_nla_mass_scalar() -> None:
 @pytest.mark.parametrize(
     ("red_fraction", "halo_mass", "pivot_halo_mass", "match"),
     [
-        ([-0.1, 0.5], [1.0e13, 2.0e13], DEFAULT_PIVOT_HALO_MASS, "red_fraction"),
-        ([0.1, 1.2], [1.0e13, 2.0e13], DEFAULT_PIVOT_HALO_MASS, "red_fraction"),
+        (
+            [-0.1, 0.5],
+            [1.0e13, 2.0e13],
+            DEFAULT_PIVOT_HALO_MASS,
+            "red_fraction",
+        ),
+        (
+            [0.1, 1.2],
+            [1.0e13, 2.0e13],
+            DEFAULT_PIVOT_HALO_MASS,
+            "red_fraction",
+        ),
         ([0.1, 0.5], [0.0, 2.0e13], DEFAULT_PIVOT_HALO_MASS, "halo_mass"),
         ([0.1, 0.5], [1.0e13, 2.0e13], 0.0, "pivot_halo_mass"),
     ],
@@ -490,7 +500,12 @@ def test_registry_aliases() -> None:
 
     assert aliases["nla"] == ("constant_nla", "nla_constant")
     assert aliases["nla_z"] == ("z_nla", "redshift_nla", "nla_redshift")
-    assert aliases["nla_m"] == ("m_nla", "mass_nla", "nla_mass", "halo_mass_nla")
+    assert aliases["nla_m"] == (
+        "m_nla",
+        "mass_nla",
+        "nla_mass",
+        "halo_mass_nla",
+    )
     assert aliases["nla_lf"] == (
         "lf_nla",
         "luminosity_nla",

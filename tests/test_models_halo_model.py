@@ -219,7 +219,9 @@ def test_halo_model_ia_parameters_accepts_negative_amplitudes() -> None:
     np.testing.assert_allclose(parameters["b"], np.full_like(z, -1.7))
 
 
-def test_halo_model_ia_parameters_transition_scales_follow_input_shape() -> None:
+def test_halo_model_ia_parameters_transition_scales_follow_input_shape() -> (
+    None
+):
     """Tests that halo model IA transition scales follow the redshift shape."""
     z = np.array(
         [

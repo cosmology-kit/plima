@@ -150,9 +150,7 @@ def test_tatt_normalized_coefficients_applies_amplitudes() -> None:
 
     expected_c1 = -a1_z * c1_rho_critical * omega_m / growth_factor
     expected_c2 = a2_z * 5.0 * c1_rho_critical * omega_m / growth_factor**2
-    expected_cdelta = (
-        -a1delta_z * c1_rho_critical * omega_m / growth_factor
-    )
+    expected_cdelta = -a1delta_z * c1_rho_critical * omega_m / growth_factor
 
     np.testing.assert_allclose(coefficients["c1"], expected_c1)
     np.testing.assert_allclose(coefficients["c2"], expected_c2)
@@ -189,7 +187,9 @@ def test_tatt_normalized_coefficients_supports_omega_m_squared_c2() -> None:
     np.testing.assert_allclose(coefficients["c2"], expected_c2)
 
 
-def test_tatt_normalized_coefficients_rejects_growth_factor_shape_mismatch() -> None:
+def test_tatt_normalized_coefficients_rejects_growth_factor_shape_mismatch() -> (
+    None
+):
     """Tests that normalized TATT coefficients reject growth factor shape mismatch."""
     z = np.array([0.0, 0.5])
     growth_factor = np.array([1.0, 0.8, 0.6])
