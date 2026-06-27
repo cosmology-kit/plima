@@ -5,8 +5,10 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
+.pyre/
 .cache/
 .coverage
+.coverage.*
 coverage.xml
 htmlcov/
 
@@ -14,6 +16,7 @@ htmlcov/
 .venv/
 venv/
 env/
+ENV/
 .tox/
 .nox/
 
@@ -42,6 +45,14 @@ Thumbs.db
 # IDE files
 .vscode/
 .idea/
+*.iml
+
+# PyCharm
+.idea/
+*.iws
+*.ipr
+*.iml
+.idea_modules/
 
 # Local env files
 .env
