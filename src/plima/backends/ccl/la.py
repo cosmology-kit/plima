@@ -50,12 +50,15 @@ def make_ccl_la_ia_bias(
     validate_greater_than(z_array, threshold=-1.0, name="z")
 
     if amplitude is None:
-        ia_bias = la_amplitude(z_array, a_ia=a_ia)
+        physical_amplitude = la_amplitude(z_array, a_ia=a_ia)
     else:
         amplitude_array = as_finite_float_array(amplitude, name="amplitude")
 
         try:
-            ia_bias = np.broadcast_to(amplitude_array, z_array.shape).astype(
+            physical_amplitude = np.broadcast_to(
+                amplitude_array,
+                z_array.shape,
+            ).astype(
                 np.float64,
                 copy=True,
             )
@@ -66,4 +69,8 @@ def make_ccl_la_ia_bias(
             )
             raise ValueError(msg) from error
 
-    return z_array.astype(np.float64, copy=True), ia_bias.astype(np.float64, copy=True)
+    ia_bias = -physical_amplitude
+
+    return z_array.astype(np.float64, copy=True), ia_bias.astype(
+        np.float64, copy=True
+    )

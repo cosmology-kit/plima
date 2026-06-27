@@ -91,7 +91,9 @@ def test_la_mass_amplitude_matches_mass_scaling() -> None:
         beta=beta,
     )
 
-    expected = a_ia * red_fraction * (halo_mass / DEFAULT_PIVOT_HALO_MASS) ** beta
+    expected = (
+        a_ia * red_fraction * (halo_mass / DEFAULT_PIVOT_HALO_MASS) ** beta
+    )
 
     np.testing.assert_allclose(amplitude, expected)
     assert amplitude.dtype == np.float64
@@ -100,7 +102,9 @@ def test_la_mass_amplitude_matches_mass_scaling() -> None:
 
 def test_la_mass_amplitude_accepts_broadcastable_inputs() -> None:
     """Tests that mass dependent LA amplitude accepts broadcastable inputs."""
-    halo_mass = np.array([DEFAULT_PIVOT_HALO_MASS, 2.0 * DEFAULT_PIVOT_HALO_MASS])
+    halo_mass = np.array(
+        [DEFAULT_PIVOT_HALO_MASS, 2.0 * DEFAULT_PIVOT_HALO_MASS]
+    )
 
     amplitude = la_mass_amplitude(
         a_ia=2.0,
@@ -307,7 +311,9 @@ class InvalidFakeFractions:
         return 1.2
 
 
-def test_red_fraction_from_luminosity_functions_rejects_invalid_fraction() -> None:
+def test_red_fraction_from_luminosity_functions_rejects_invalid_fraction() -> (
+    None
+):
     """Tests that red fraction helper rejects invalid returned fractions."""
     red_lf = SimpleNamespace(fractions=InvalidFakeFractions())
 
@@ -322,7 +328,9 @@ def test_red_fraction_from_luminosity_functions_rejects_invalid_fraction() -> No
         )
 
 
-def test_red_fraction_from_luminosity_functions_rejects_invalid_limits() -> None:
+def test_red_fraction_from_luminosity_functions_rejects_invalid_limits() -> (
+    None
+):
     """Tests that red fraction helper rejects invalid magnitude limits."""
     red_lf = SimpleNamespace(fractions=FakeFractions())
 
@@ -411,7 +419,9 @@ def test_lf_la_amplitude_rejects_invalid_redshift() -> None:
 def test_lf_la_amplitude_rejects_invalid_red_fraction() -> None:
     """Tests that LF weighted LA amplitude rejects invalid red fractions."""
     with pytest.raises(ValueError):
-        lf_la_amplitude([0.0, 0.5], [1.0, 1.0], a_ia=1.0, red_fraction=[0.5, -0.1])
+        lf_la_amplitude(
+            [0.0, 0.5], [1.0, 1.0], a_ia=1.0, red_fraction=[0.5, -0.1]
+        )
 
 
 def test_lf_la_amplitude_rejects_invalid_low_z_pivot() -> None:

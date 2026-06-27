@@ -85,10 +85,7 @@ def test_halo_model_nla_prefactor_matches_expected_formula(
     )
 
     expected = (
-        a_ia
-        * c1_rho_critical
-        * cosmo["Omega_m"]
-        / cosmo.growth_factor(a)
+        a_ia * c1_rho_critical * cosmo["Omega_m"] / cosmo.growth_factor(a)
     )
 
     np.testing.assert_allclose(prefactor, expected)
@@ -150,7 +147,9 @@ def test_power_grid_accepts_transposed_shape(
     a: np.ndarray,
 ) -> None:
     """Tests that power grid validation transposes CCL style grids."""
-    values = np.arange(k.size * a.size, dtype=np.float64).reshape(k.size, a.size)
+    values = np.arange(k.size * a.size, dtype=np.float64).reshape(
+        k.size, a.size
+    )
 
     grid = _power_grid(values, k=k, a=a, name="values")
 
@@ -358,7 +357,9 @@ def test_evaluate_pk2d_grid_rejects_nonfinite_values(
     """Tests that Pk2D grid evaluation rejects nonfinite values."""
 
     class BadPk2D:
-        def __call__(self, k_eval: np.ndarray, a_eval: np.ndarray) -> np.ndarray:
+        def __call__(
+            self, k_eval: np.ndarray, a_eval: np.ndarray
+        ) -> np.ndarray:
             values = np.ones((a_eval.size, k_eval.size))
             values[0, 0] = np.nan
             return values

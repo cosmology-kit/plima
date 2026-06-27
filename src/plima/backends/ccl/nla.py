@@ -3,8 +3,10 @@
 This module connects PLIMA NLA amplitude models to the IA bias tuple expected
 by CCL weak lensing tracers.
 
-The NLA amplitude model lives in ``plima.models.nla``. This file only prepares
-the ``(z, ia_bias)`` tuple used by CCL.
+The backend independent NLA model uses a positive physical ``A_IA`` and applies
+the physical NLA response sign internally. CCL weak lensing tracers use the
+opposite sign convention for the IA bias tuple, so this backend flips the sign
+before returning ``(z, ia_bias)``.
 """
 
 from __future__ import annotations
@@ -29,14 +31,22 @@ def make_ccl_nla_ia_bias(
 ) -> tuple[FloatArray, FloatArray]:
     """Return a CCL IA bias tuple for NLA.
 
+    This backend follows the PLIMA user-facing convention that positive
+    ``A_IA`` corresponds to a positive physical NLA amplitude. The sign needed
+    by CCL weak lensing tracers is applied internally, so the returned
+    ``ia_bias`` is ``-amplitude``.
+
     Args:
         z: Redshift values where the IA bias should be sampled.
-        amplitude: Optional precomputed NLA amplitude evaluated at ``z``. If
-            ``None``, the amplitude is computed from ``nla_amplitude``.
-        a_ia: NLA amplitude normalization used when ``amplitude`` is ``None``.
+        amplitude: Optional precomputed positive physical NLA amplitude
+            evaluated at ``z``. If ``None``, the amplitude is computed from
+            ``nla_amplitude``.
+        a_ia: Positive physical NLA amplitude normalization used when
+            ``amplitude`` is ``None``.
 
     Returns:
-        Redshift values and IA bias values sampled on the same grid.
+        Redshift values and CCL sign convention IA bias values sampled on the
+        same grid.
 
     Raises:
         ValueError: If redshifts are not finite, redshifts are outside the
@@ -50,12 +60,15 @@ def make_ccl_nla_ia_bias(
     validate_greater_than(z_array, threshold=-1.0, name="z")
 
     if amplitude is None:
-        ia_bias = nla_amplitude(z_array, a_ia=a_ia)
+        physical_amplitude = nla_amplitude(z_array, a_ia=a_ia)
     else:
         amplitude_array = as_finite_float_array(amplitude, name="amplitude")
 
         try:
-            ia_bias = np.broadcast_to(amplitude_array, z_array.shape).astype(
+            physical_amplitude = np.broadcast_to(
+                amplitude_array,
+                z_array.shape,
+            ).astype(
                 np.float64,
                 copy=True,
             )
@@ -66,4 +79,8 @@ def make_ccl_nla_ia_bias(
             )
             raise ValueError(msg) from error
 
-    return z_array.astype(np.float64, copy=True), ia_bias.astype(np.float64, copy=True)
+    ia_bias = -physical_amplitude
+
+    return z_array.astype(np.float64, copy=True), ia_bias.astype(
+        np.float64, copy=True
+    )

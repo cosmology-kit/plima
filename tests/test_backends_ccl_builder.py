@@ -52,7 +52,9 @@ def test_canonical_model_name_resolves_alias(monkeypatch) -> None:
 
 def test_canonical_model_name_returns_unknown_name(monkeypatch) -> None:
     """Tests that unknown names are returned normalized."""
-    monkeypatch.setattr(builder, "list_model_aliases", lambda: {"nla": ("nla_lf",)})
+    monkeypatch.setattr(
+        builder, "list_model_aliases", lambda: {"nla": ("nla_lf",)}
+    )
 
     assert builder._canonical_model_name("missing") == "missing"
 
@@ -78,7 +80,9 @@ def test_evaluate_amplitude_model_passes_z_when_supported() -> None:
     """Tests that amplitude models with z receive redshift values."""
     z = np.array([0.0, 0.5, 1.0])
 
-    amplitude = builder._evaluate_amplitude_model(_amplitude_with_z, z, a_ia=3.0)
+    amplitude = builder._evaluate_amplitude_model(
+        _amplitude_with_z, z, a_ia=3.0
+    )
 
     np.testing.assert_allclose(amplitude, np.full_like(z, 3.0))
 
@@ -156,7 +160,9 @@ def test_build_la_model_delegates_to_la_bias_builder(monkeypatch) -> None:
         np.testing.assert_allclose(amplitude, np.full_like(z, 5.0))
         return ("la_z", "la_bias")
 
-    monkeypatch.setattr(builder, "make_ccl_la_ia_bias", fake_make_ccl_la_ia_bias)
+    monkeypatch.setattr(
+        builder, "make_ccl_la_ia_bias", fake_make_ccl_la_ia_bias
+    )
 
     result = builder._build_la_model(
         cosmo=object(),
@@ -170,7 +176,9 @@ def test_build_la_model_delegates_to_la_bias_builder(monkeypatch) -> None:
     assert result["family"] == "la"
     assert result["mode"] == "native_bias"
     assert result["ia_bias"] == ("la_z", "la_bias")
-    np.testing.assert_allclose(result["metadata"]["amplitude"], np.full_like(z, 5.0))
+    np.testing.assert_allclose(
+        result["metadata"]["amplitude"], np.full_like(z, 5.0)
+    )
 
 
 def test_build_nla_model_delegates_to_nla_bias_builder(monkeypatch) -> None:
@@ -183,7 +191,9 @@ def test_build_nla_model_delegates_to_nla_bias_builder(monkeypatch) -> None:
         np.testing.assert_allclose(amplitude, np.full_like(z, 6.0))
         return ("nla_z", "nla_bias")
 
-    monkeypatch.setattr(builder, "make_ccl_nla_ia_bias", fake_make_ccl_nla_ia_bias)
+    monkeypatch.setattr(
+        builder, "make_ccl_nla_ia_bias", fake_make_ccl_nla_ia_bias
+    )
 
     result = builder._build_nla_model(
         cosmo=object(),
@@ -197,10 +207,14 @@ def test_build_nla_model_delegates_to_nla_bias_builder(monkeypatch) -> None:
     assert result["family"] == "nla"
     assert result["mode"] == "native_bias"
     assert result["ia_bias"] == ("nla_z", "nla_bias")
-    np.testing.assert_allclose(result["metadata"]["amplitude"], np.full_like(z, 6.0))
+    np.testing.assert_allclose(
+        result["metadata"]["amplitude"], np.full_like(z, 6.0)
+    )
 
 
-def test_build_tatt_model_delegates_to_tatt_spectra_builder(monkeypatch) -> None:
+def test_build_tatt_model_delegates_to_tatt_spectra_builder(
+    monkeypatch,
+) -> None:
     """Tests that TATT models delegate to the TATT spectra builder."""
     cosmo = object()
     z = np.array([0.0, 0.5])
@@ -235,7 +249,9 @@ def test_build_tatt_model_delegates_to_tatt_spectra_builder(monkeypatch) -> None
     assert result["metadata"]["raw_backend_result"] == raw_result
 
 
-def test_build_halo_model_delegates_to_halo_spectra_builder(monkeypatch) -> None:
+def test_build_halo_model_delegates_to_halo_spectra_builder(
+    monkeypatch,
+) -> None:
     """Tests that halo model IA delegates to the halo spectra builder."""
     cosmo = object()
     z = np.array([0.0, 0.5])
@@ -258,7 +274,9 @@ def test_build_halo_model_delegates_to_halo_spectra_builder(monkeypatch) -> None
         cosmo=cosmo,
         model_name="halo_model",
         canonical_model_name="halo_model",
-        model_function=_set_module(_amplitude_with_z, "plima.models.halo_model"),
+        model_function=_set_module(
+            _amplitude_with_z, "plima.models.halo_model"
+        ),
         z=z,
         a1h=0.01,
     )
@@ -338,7 +356,9 @@ def test_build_ccl_ia_model_dispatches_by_model_family(
     assert calls[0]["amplitude"] == 1.0
 
 
-def test_build_ccl_ia_model_resolves_alias_to_canonical_name(monkeypatch) -> None:
+def test_build_ccl_ia_model_resolves_alias_to_canonical_name(
+    monkeypatch,
+) -> None:
     """Tests that aliases are recorded with their canonical model name."""
     z = np.array([0.0, 0.5])
     model_function = _set_module(_amplitude_with_z, "plima.models.nla")
@@ -356,8 +376,12 @@ def test_build_ccl_ia_model_resolves_alias_to_canonical_name(monkeypatch) -> Non
         }
 
     monkeypatch.setattr(builder, "get_model", lambda name: model_function)
-    monkeypatch.setattr(builder, "list_model_aliases", lambda: {"nla": ("nla_lf",)})
-    monkeypatch.setitem(builder._CCL_FAMILY_BUILDERS, "nla", fake_family_builder)
+    monkeypatch.setattr(
+        builder, "list_model_aliases", lambda: {"nla": ("nla_lf",)}
+    )
+    monkeypatch.setitem(
+        builder._CCL_FAMILY_BUILDERS, "nla", fake_family_builder
+    )
 
     result = builder.build_ccl_ia_model(object(), "NLA_LF", z)
 
@@ -371,11 +395,15 @@ def test_build_ccl_ia_model_raises_for_unknown_family(monkeypatch) -> None:
     monkeypatch.setattr(builder, "get_model", lambda name: model_function)
     monkeypatch.setattr(builder, "list_model_aliases", lambda: {"unknown": ()})
 
-    with pytest.raises(ValueError, match="Model family 'unknown' has no CCL builder."):
+    with pytest.raises(
+        ValueError, match="Model family 'unknown' has no CCL builder."
+    ):
         builder.build_ccl_ia_model(object(), "unknown", np.array([0.0, 0.5]))
 
 
-def test_build_ccl_ia_model_propagates_missing_model_error(monkeypatch) -> None:
+def test_build_ccl_ia_model_propagates_missing_model_error(
+    monkeypatch,
+) -> None:
     """Tests that missing registry entries keep the registry KeyError."""
 
     def fake_get_model(name: str):
@@ -396,14 +424,18 @@ def test_normalize_model_name_rejects_non_string() -> None:
 
 def test_canonical_model_name_strips_and_lowers_alias(monkeypatch) -> None:
     """Tests that canonical model lookup normalizes aliases."""
-    monkeypatch.setattr(builder, "list_model_aliases", lambda: {"nla": ("nla_lf",)})
+    monkeypatch.setattr(
+        builder, "list_model_aliases", lambda: {"nla": ("nla_lf",)}
+    )
 
     assert builder._canonical_model_name("  NLA_LF  ") == "nla"
 
 
 def test_model_family_handles_nested_module_family() -> None:
     """Tests that model family uses the final module component."""
-    model_function = _set_module(_amplitude_with_z, "some.package.plima.models.nla")
+    model_function = _set_module(
+        _amplitude_with_z, "some.package.plima.models.nla"
+    )
 
     assert builder._model_family(model_function) == "nla"
 
@@ -433,7 +465,9 @@ def test_evaluate_amplitude_model_forwards_kwargs_when_z_supported() -> None:
     def model(z, *, scale: float, offset: float):
         return scale * np.asarray(z) + offset
 
-    amplitude = builder._evaluate_amplitude_model(model, z, scale=2.0, offset=1.0)
+    amplitude = builder._evaluate_amplitude_model(
+        model, z, scale=2.0, offset=1.0
+    )
 
     np.testing.assert_allclose(amplitude, np.array([1.0, 2.0]))
 
@@ -444,7 +478,9 @@ def test_evaluate_amplitude_model_forwards_kwargs_when_z_unsupported() -> None:
     def model(*, scale: float, offset: float):
         return scale + offset
 
-    amplitude = builder._evaluate_amplitude_model(model, np.array([0.0]), scale=2.0, offset=1.0)
+    amplitude = builder._evaluate_amplitude_model(
+        model, np.array([0.0]), scale=2.0, offset=1.0
+    )
 
     assert amplitude == 3.0
 
@@ -480,7 +516,9 @@ def test_pk2d_model_preserves_raw_backend_result_identity() -> None:
     assert result["metadata"]["raw_backend_result"] is raw_backend_result
 
 
-def test_build_la_model_omits_cosmo_for_native_bias_builder(monkeypatch) -> None:
+def test_build_la_model_omits_cosmo_for_native_bias_builder(
+    monkeypatch,
+) -> None:
     """Tests that LA native bias construction does not pass cosmology."""
     z = np.array([0.0, 0.5])
     model_function = _set_module(_amplitude_with_z, "plima.models.la")
@@ -491,7 +529,9 @@ def test_build_la_model_omits_cosmo_for_native_bias_builder(monkeypatch) -> None
         assert set(kwargs) == {"amplitude"}
         return ("z", "bias")
 
-    monkeypatch.setattr(builder, "make_ccl_la_ia_bias", fake_make_ccl_la_ia_bias)
+    monkeypatch.setattr(
+        builder, "make_ccl_la_ia_bias", fake_make_ccl_la_ia_bias
+    )
 
     result = builder._build_la_model(
         cosmo=object(),
@@ -504,7 +544,9 @@ def test_build_la_model_omits_cosmo_for_native_bias_builder(monkeypatch) -> None
     assert result["mode"] == "native_bias"
 
 
-def test_build_nla_model_omits_cosmo_for_native_bias_builder(monkeypatch) -> None:
+def test_build_nla_model_omits_cosmo_for_native_bias_builder(
+    monkeypatch,
+) -> None:
     """Tests that NLA native bias construction does not pass cosmology."""
     z = np.array([0.0, 0.5])
     model_function = _set_module(_amplitude_with_z, "plima.models.nla")
@@ -515,7 +557,9 @@ def test_build_nla_model_omits_cosmo_for_native_bias_builder(monkeypatch) -> Non
         assert set(kwargs) == {"amplitude"}
         return ("z", "bias")
 
-    monkeypatch.setattr(builder, "make_ccl_nla_ia_bias", fake_make_ccl_nla_ia_bias)
+    monkeypatch.setattr(
+        builder, "make_ccl_nla_ia_bias", fake_make_ccl_nla_ia_bias
+    )
 
     result = builder._build_nla_model(
         cosmo=object(),
@@ -569,14 +613,18 @@ def test_build_halo_model_ignores_model_function(monkeypatch) -> None:
         cosmo=cosmo,
         model_name="halo_model",
         canonical_model_name="halo_model",
-        model_function=_set_module(_amplitude_without_z, "plima.models.halo_model"),
+        model_function=_set_module(
+            _amplitude_without_z, "plima.models.halo_model"
+        ),
         z=z,
     )
 
     assert result["spectra"] == spectra
 
 
-def test_build_ccl_ia_model_uses_family_not_canonical_name(monkeypatch) -> None:
+def test_build_ccl_ia_model_uses_family_not_canonical_name(
+    monkeypatch,
+) -> None:
     """Tests that dispatch follows the model function family."""
     z = np.array([0.0, 0.5])
     model_function = _set_module(_amplitude_with_z, "plima.models.nla")
@@ -594,8 +642,12 @@ def test_build_ccl_ia_model_uses_family_not_canonical_name(monkeypatch) -> None:
         }
 
     monkeypatch.setattr(builder, "get_model", lambda name: model_function)
-    monkeypatch.setattr(builder, "list_model_aliases", lambda: {"some_alias": ()})
-    monkeypatch.setitem(builder._CCL_FAMILY_BUILDERS, "nla", fake_family_builder)
+    monkeypatch.setattr(
+        builder, "list_model_aliases", lambda: {"some_alias": ()}
+    )
+    monkeypatch.setitem(
+        builder._CCL_FAMILY_BUILDERS, "nla", fake_family_builder
+    )
 
     result = builder.build_ccl_ia_model(object(), "some_alias", z)
 
@@ -623,7 +675,9 @@ def test_build_ccl_ia_model_propagates_builder_kwargs(monkeypatch) -> None:
 
     monkeypatch.setattr(builder, "get_model", lambda name: model_function)
     monkeypatch.setattr(builder, "list_model_aliases", lambda: {"la": ()})
-    monkeypatch.setitem(builder._CCL_FAMILY_BUILDERS, "la", fake_family_builder)
+    monkeypatch.setitem(
+        builder._CCL_FAMILY_BUILDERS, "la", fake_family_builder
+    )
 
     builder.build_ccl_ia_model(
         object(),

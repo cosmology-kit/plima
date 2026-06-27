@@ -31,13 +31,18 @@ def test_import_model_modules_skips_non_model_modules(monkeypatch) -> None:
         return SimpleNamespace()
 
     monkeypatch.setattr(_discovery.pkgutil, "iter_modules", fake_iter_modules)
-    monkeypatch.setattr(_discovery.importlib, "import_module", fake_import_module)
+    monkeypatch.setattr(
+        _discovery.importlib, "import_module", fake_import_module
+    )
 
     _discovery.import_model_modules()
 
     assert imported_modules == []
 
-def test_import_model_modules_skips_registry_and_helper_modules(monkeypatch) -> None:
+
+def test_import_model_modules_skips_registry_and_helper_modules(
+    monkeypatch,
+) -> None:
     """Tests that registry and helper modules are not imported."""
     module_names = [
         "_discovery",
@@ -54,7 +59,9 @@ def test_import_model_modules_skips_registry_and_helper_modules(monkeypatch) -> 
         return SimpleNamespace()
 
     monkeypatch.setattr(_discovery.pkgutil, "iter_modules", fake_iter_modules)
-    monkeypatch.setattr(_discovery.importlib, "import_module", fake_import_module)
+    monkeypatch.setattr(
+        _discovery.importlib, "import_module", fake_import_module
+    )
 
     _discovery.import_model_modules()
 
@@ -166,4 +173,3 @@ def test_real_discovery_retrieves_halo_model() -> None:
     np.testing.assert_allclose(parameters["b"], [-2.0, -2.0, -2.0])
     np.testing.assert_allclose(parameters["k_1h"], [1.5, 1.5, 1.5])
     np.testing.assert_allclose(parameters["k_2h"], [0.2, 0.2, 0.2])
-
