@@ -15,7 +15,7 @@ def test_make_ccl_la_ia_bias_uses_default_amplitude() -> None:
     z_out, ia_bias = make_ccl_la_ia_bias(z, a_ia=2.5)
 
     np.testing.assert_allclose(z_out, z)
-    np.testing.assert_allclose(ia_bias, np.full_like(z, -2.5))
+    np.testing.assert_allclose(ia_bias, np.full_like(z, 2.5))
     assert z_out.dtype == np.float64
     assert ia_bias.dtype == np.float64
 
@@ -28,7 +28,7 @@ def test_make_ccl_la_ia_bias_uses_precomputed_amplitude() -> None:
     z_out, ia_bias = make_ccl_la_ia_bias(z, amplitude=amplitude)
 
     np.testing.assert_allclose(z_out, z)
-    np.testing.assert_allclose(ia_bias, -amplitude)
+    np.testing.assert_allclose(ia_bias, amplitude)
 
 
 def test_make_ccl_la_ia_bias_accepts_scalar_amplitude_for_scalar_z() -> None:
@@ -36,7 +36,7 @@ def test_make_ccl_la_ia_bias_accepts_scalar_amplitude_for_scalar_z() -> None:
     z_out, ia_bias = make_ccl_la_ia_bias(0.5, amplitude=2.0)
 
     np.testing.assert_allclose(z_out, np.array([0.5]))
-    np.testing.assert_allclose(ia_bias, np.array([-2.0]))
+    np.testing.assert_allclose(ia_bias, np.array([2.0]))
     assert z_out.shape == (1,)
     assert ia_bias.shape == (1,)
 
@@ -48,7 +48,7 @@ def test_make_ccl_la_ia_bias_accepts_scalar_amplitude_for_array_z() -> None:
     z_out, ia_bias = make_ccl_la_ia_bias(z, amplitude=2.0)
 
     np.testing.assert_allclose(z_out, z)
-    np.testing.assert_allclose(ia_bias, np.array([-2.0, -2.0, -2.0]))
+    np.testing.assert_allclose(ia_bias, np.array([2.0, 2.0, 2.0]))
 
 
 def test_make_ccl_la_ia_bias_rejects_amplitude_shape_mismatch() -> None:
@@ -124,7 +124,7 @@ def test_make_ccl_la_ia_bias_preserves_redshift_and_amplitude_order() -> None:
     z_out, ia_bias = make_ccl_la_ia_bias(z, amplitude=amplitude)
 
     np.testing.assert_allclose(z_out, z)
-    np.testing.assert_allclose(ia_bias, -amplitude)
+    np.testing.assert_allclose(ia_bias, amplitude)
 
 
 def test_make_ccl_la_ia_bias_returns_copies_as_float_arrays() -> None:
@@ -135,7 +135,7 @@ def test_make_ccl_la_ia_bias_returns_copies_as_float_arrays() -> None:
     z_out, ia_bias = make_ccl_la_ia_bias(z, amplitude=amplitude)
 
     np.testing.assert_allclose(z_out, np.array([1.0, 0.0]))
-    np.testing.assert_allclose(ia_bias, np.array([-2.0, -1.0]))
+    np.testing.assert_allclose(ia_bias, np.array([2.0, 1.0]))
     assert z_out.dtype == np.float64
     assert ia_bias.dtype == np.float64
 
@@ -148,7 +148,7 @@ def test_make_ccl_la_ia_bias_accepts_list_redshift_and_amplitude() -> None:
     z_out, ia_bias = make_ccl_la_ia_bias(z, amplitude=amplitude)
 
     np.testing.assert_allclose(z_out, np.array(z))
-    np.testing.assert_allclose(ia_bias, -np.array(amplitude))
+    np.testing.assert_allclose(ia_bias, np.array(amplitude))
     assert z_out.dtype == np.float64
     assert ia_bias.dtype == np.float64
 
@@ -184,7 +184,7 @@ def test_make_ccl_la_ia_bias_returns_independent_arrays() -> None:
     amplitude[0] = 99.0
 
     np.testing.assert_allclose(z_out, np.array([0.0, 0.5, 1.0]))
-    np.testing.assert_allclose(ia_bias, np.array([-1.0, -2.0, -3.0]))
+    np.testing.assert_allclose(ia_bias, np.array([1.0, 2.0, 3.0]))
 
 
 def test_make_ccl_la_ia_bias_rejects_empty_redshift() -> None:
@@ -214,4 +214,4 @@ def test_make_ccl_la_ia_bias_accepts_length_one_amplitude_array() -> None:
     z_out, ia_bias = make_ccl_la_ia_bias(z, amplitude=amplitude)
 
     np.testing.assert_allclose(z_out, z)
-    np.testing.assert_allclose(ia_bias, np.full_like(z, -2.0))
+    np.testing.assert_allclose(ia_bias, np.full_like(z, 2.0))
