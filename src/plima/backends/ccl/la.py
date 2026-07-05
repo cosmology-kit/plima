@@ -3,8 +3,10 @@
 This module connects PLIMA LA amplitude models to the IA bias tuple expected by
 CCL weak lensing tracers.
 
-The LA amplitude model lives in ``plima.models.la``. This file only prepares
-the ``(z, ia_bias)`` tuple used by CCL.
+CCL weak lensing tracers expect the conventional user facing ``A_IA(z)``
+amplitude when ``use_A_ia=True``. CCL then applies the IA normalization and
+minus sign internally. Therefore this backend returns the PLIMA amplitude
+directly and does not flip its sign.
 """
 
 from __future__ import annotations
@@ -29,14 +31,21 @@ def make_ccl_la_ia_bias(
 ) -> tuple[FloatArray, FloatArray]:
     """Return a CCL IA bias tuple for LA.
 
+    This backend follows the PLIMA user-facing convention that positive ``A_IA``
+    corresponds to a positive LA amplitude. The returned ``ia_bias`` is the
+    conventional ``A_IA(z)`` tuple expected by CCL when
+    ``WeakLensingTracer(..., use_A_ia=True)`` is used.
+
     Args:
         z: Redshift values where the IA bias should be sampled.
-        amplitude: Optional precomputed LA amplitude evaluated at ``z``. If
-            ``None``, the amplitude is computed from ``la_amplitude``.
-        a_ia: LA amplitude normalization used when ``amplitude`` is ``None``.
+        amplitude: Optional precomputed positive LA amplitude evaluated at ``z``.
+            If ``None``, the amplitude is computed from ``la_amplitude``.
+        a_ia: Positive LA amplitude normalization used when ``amplitude`` is
+            ``None``.
 
     Returns:
-        Redshift values and IA bias values sampled on the same grid.
+        Redshift values and conventional CCL ``A_IA(z)`` values sampled on the
+        same grid.
 
     Raises:
         ValueError: If redshifts are not finite, redshifts are outside the
@@ -69,7 +78,7 @@ def make_ccl_la_ia_bias(
             )
             raise ValueError(msg) from error
 
-    ia_bias = -physical_amplitude
+    ia_bias = physical_amplitude
 
     return z_array.astype(np.float64, copy=True), ia_bias.astype(
         np.float64, copy=True

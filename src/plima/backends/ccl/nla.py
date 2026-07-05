@@ -3,10 +3,10 @@
 This module connects PLIMA NLA amplitude models to the IA bias tuple expected
 by CCL weak lensing tracers.
 
-The backend independent NLA model uses a positive physical ``A_IA`` and applies
-the physical NLA response sign internally. CCL weak lensing tracers use the
-opposite sign convention for the IA bias tuple, so this backend flips the sign
-before returning ``(z, ia_bias)``.
+CCL weak lensing tracers expect the conventional user facing ``A_IA(z)``
+amplitude when ``use_A_ia=True``. CCL then applies the NLA normalization and
+minus sign internally. Therefore this backend returns the physical PLIMA
+amplitude directly and does not flip its sign.
 """
 
 from __future__ import annotations
@@ -32,25 +32,21 @@ def make_ccl_nla_ia_bias(
     """Return a CCL IA bias tuple for NLA.
 
     This backend follows the PLIMA user-facing convention that positive
-    ``A_IA`` corresponds to a positive physical NLA amplitude. The sign needed
-    by CCL weak lensing tracers is applied internally, so the returned
-    ``ia_bias`` is ``-amplitude``.
+    ``A_IA`` corresponds to a positive NLA amplitude. The returned ``ia_bias`` is
+    the conventional ``A_IA(z)`` tuple expected by CCL when
+    ``WeakLensingTracer(..., use_A_ia=True)`` is used.
 
     Args:
         z: Redshift values where the IA bias should be sampled.
-        amplitude: Optional precomputed positive physical NLA amplitude
-            evaluated at ``z``. If ``None``, the amplitude is computed from
+        amplitude: Optional precomputed positive physical NLA amplitude evaluated
+            at ``z``. If ``None``, the amplitude is computed from
             ``nla_amplitude``.
         a_ia: Positive physical NLA amplitude normalization used when
             ``amplitude`` is ``None``.
 
     Returns:
-        Redshift values and CCL sign convention IA bias values sampled on the
+        Redshift values and conventional CCL ``A_IA(z)`` values sampled on the
         same grid.
-
-    Raises:
-        ValueError: If redshifts are not finite, redshifts are outside the
-            valid domain, or amplitude cannot be broadcast to match ``z``.
     """
     z_array = np.atleast_1d(as_finite_float_array(z, name="z"))
     if z_array.size == 0:
@@ -79,7 +75,7 @@ def make_ccl_nla_ia_bias(
             )
             raise ValueError(msg) from error
 
-    ia_bias = -physical_amplitude
+    ia_bias = physical_amplitude
 
     return z_array.astype(np.float64, copy=True), ia_bias.astype(
         np.float64, copy=True
