@@ -5,7 +5,9 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
+from plima.backends.ccl.builder import build_ccl_ia_model
 from plima.backends.ccl.la import make_ccl_la_ia_bias
+from plima.models.la import la_z_amplitude
 
 
 def test_make_ccl_la_ia_bias_uses_default_amplitude() -> None:
@@ -215,3 +217,28 @@ def test_make_ccl_la_ia_bias_accepts_length_one_amplitude_array() -> None:
 
     np.testing.assert_allclose(z_out, z)
     np.testing.assert_allclose(ia_bias, np.full_like(z, 2.0))
+
+
+def test_build_ccl_la_z_model_forwards_redshift_kwargs() -> None:
+    """Tests that the CCL builder forwards redshift LA parameters."""
+    z = np.array([0.0, 0.5, 1.0])
+
+    result = build_ccl_ia_model(
+        None,
+        "la_z",
+        z,
+        a_ia=1.0,
+        b_ia=0.5,
+        pivot_redshift=0.5,
+    )
+
+    expected = la_z_amplitude(
+        z,
+        a_ia=1.0,
+        b_ia=0.5,
+        pivot_redshift=0.5,
+    )
+
+    assert result["mode"] == "native_bias"
+    np.testing.assert_allclose(result["ia_bias"][0], z)
+    np.testing.assert_allclose(result["ia_bias"][1], expected)
