@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from plima.backends.ccl.builder import build_ccl_ia_model
+from plima.backends.ccl import build_ccl_ia_model
 from plima.backends.ccl.nla import make_ccl_nla_ia_bias
 from plima.models.nla import nla_z_amplitude
 
