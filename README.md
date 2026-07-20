@@ -22,6 +22,13 @@ PLIMA currently includes:
 
 ## Installation
 
+You can easily install ``plima`` via ``pip``:
+
+```bash
+pip install plima
+```
+
+
 For development, clone the repository and install it in editable mode:
 
 ```bash
