@@ -51,7 +51,7 @@ If you use PLIMA in your research, please cite it.
   title   = {PLIMA: Python Library for Intrinsic Alignment Models and Amplitudes},
   author  = {Šarčević, Nikolina},
   year    = {2026},
-  version = {0.1.4},
+  version = {0.1.5},
   url     = {https://github.com/cosmology-kit/plima}
 }
 ```
