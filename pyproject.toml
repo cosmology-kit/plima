@@ -25,12 +25,11 @@ classifiers = [
 ]
 
 dependencies = [
-  "numpy>=1.23,<2.4",
+  "numpy>=1.23",
   "scipy",
   "py-lfkit",
   "pybinny",
   "pyccl",
-  "fast-pt>=4",
 ]
 
 [project.optional-dependencies]
@@ -46,11 +45,9 @@ docs = [
   "sphinx-copybutton",
   "furo",
   "sphinx-multiversion",
-  "setuptools-scm>=8",
   "matplotlib",
   "cmasher",
   "tox",
-  "packaging",
 ]
 
 dev = [
@@ -58,7 +55,6 @@ dev = [
   "pytest-cov>=4",
   "ruff>=0.5",
   "tox>=4.22",
-  "bump-my-version>=0.26",
 ]
 
 [tool.setuptools_scm]
@@ -221,11 +217,6 @@ commands = [
     "--fail-on-warning",
   ],
   [
-    "python",
-    "-c",
-    "from pathlib import Path; import shutil; from packaging.version import Version; root = Path(r'{tox_root}/docs/_build/html'); versions = [p for p in root.iterdir() if p.is_dir() and p.name.startswith('v')]; latest = max(versions, key=lambda p: Version(p.name.removeprefix('v'))); target = root / 'latest'; shutil.rmtree(target, ignore_errors=True); shutil.copytree(latest, target)",
-  ],
-  [
     "cp",
     "{tox_root}/docs/_templates/pages_redirect.html",
     "{tox_root}/docs/_build/html/index.html",
@@ -251,20 +242,3 @@ deps = ["setuptools-scm>=8"]
 commands = [
   ["python", "tools/sync_release_metadata.py"],
 ]
-
-[tool.bumpversion]
-current_version = "0.1.5"
-commit = true
-tag = true
-tag_name = "v{new_version}"
-message = "Bump version: {current_version} → {new_version}"
-
-[[tool.bumpversion.files]]
-filename = "README.md"
-search = "  version = {{{current_version}}},"
-replace = "  version = {{{new_version}}},"
-
-[[tool.bumpversion.files]]
-filename = "CITATION.cff"
-search = 'version: "{current_version}"'
-replace = 'version: "{new_version}"'

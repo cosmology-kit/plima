@@ -1,8 +1,8 @@
-cff-version: 1.2.0
+cff-version: 0.1.0
 message: "If you use PLIMA, please cite it as below."
-title: "PLIMA: Python Library for Intrinsic Alignment Models and Amplitudes"
+title: "PLIMA: Python Library for Intrinsic alignment Models and Amplitudes"
 type: software
-version: "0.1.5"
+version: "0.1.0"
 
 authors:
   - given-names: "Nikolina"
