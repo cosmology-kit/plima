@@ -25,11 +25,12 @@ classifiers = [
 ]
 
 dependencies = [
-  "numpy>=1.23",
+  "numpy>=1.23,<2.4",
   "scipy",
   "py-lfkit",
   "pybinny",
   "pyccl",
+  "fast-pt>=4",
 ]
 
 [project.optional-dependencies]
@@ -45,6 +46,7 @@ docs = [
   "sphinx-copybutton",
   "furo",
   "sphinx-multiversion",
+  "setuptools-scm>=8",
   "matplotlib",
   "cmasher",
   "tox",
@@ -55,6 +57,7 @@ dev = [
   "pytest-cov>=4",
   "ruff>=0.5",
   "tox>=4.22",
+  "bump-my-version>=0.26",
 ]
 
 [tool.setuptools_scm]
@@ -242,3 +245,20 @@ deps = ["setuptools-scm>=8"]
 commands = [
   ["python", "tools/sync_release_metadata.py"],
 ]
+
+[tool.bumpversion]
+current_version = "0.1.4"
+commit = true
+tag = true
+tag_name = "v{new_version}"
+message = "Bump version: {current_version} → {new_version}"
+
+[[tool.bumpversion.files]]
+filename = "README.md"
+search = "  version = {{{current_version}}},"
+replace = "  version = {{{new_version}}},"
+
+[[tool.bumpversion.files]]
+filename = "CITATION.cff"
+search = 'version: "{current_version}"'
+replace = 'version: "{new_version}"'
