@@ -48,10 +48,10 @@ If you use PLIMA in your research, please cite it.
 
 ```bibtex
 @software{sarcevic2026plima,
-  title   = {PLIMA: Python Library for Intrinsic alignment Models and Amplitudes},
+  title   = {PLIMA: Python Library for Intrinsic Alignment Models and Amplitudes},
   author  = {Šarčević, Nikolina},
   year    = {2026},
-  version = {0.1.0},
+  version = {0.1.4},
   url     = {https://github.com/cosmology-kit/plima}
 }
 ```
