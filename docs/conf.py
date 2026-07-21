@@ -7,17 +7,8 @@ import sys
 import warnings
 
 import matplotlib
-from setuptools_scm import get_version
 
 matplotlib.use("Agg")
-
-
-# -----------------------------------------------------------------------------
-# Project version
-# -----------------------------------------------------------------------------
-release = get_version(root="..", relative_to=__file__)
-version = ".".join(release.split(".")[:2])
-
 
 # -----------------------------------------------------------------------------
 # Ensure src/ layout imports work
